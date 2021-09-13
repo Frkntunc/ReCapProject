@@ -20,22 +20,22 @@ namespace WebAPI.Controllers
             _userService = userService;
         }
 
-        [HttpGet("getall")]
-        public IActionResult Get()
+        [HttpGet("getclaims")]
+        public IActionResult Get(User user)
         {
-            var result = _userService.GetAll();
-            if (result.Success)
+            var result = _userService.GetClaims(user);
+            if (result != null)
             {
                 return Ok(result);
             }
             return BadRequest(result);
         }
 
-        [HttpGet("getbyid")]
-        public IActionResult GetById(int id)
+        [HttpGet("getbymail")]
+        public IActionResult GetById(string mail)
         {
-            var result = _userService.GetByUserId(id);
-            if (result.Success)
+            var result = _userService.GetByMail(mail);
+            if (result != null)
             {
                 return Ok(result);
             }
@@ -45,30 +45,8 @@ namespace WebAPI.Controllers
         [HttpPost("add")]
         public IActionResult Add(User user)
         {
-            var result = _userService.Insert(user);
-            if (result.Success)
-            {
-                return Ok(result);
-            }
-            return BadRequest(result);
-        }
-
-        [HttpPost("delete")]
-        public IActionResult Delete(User user)
-        {
-            var result = _userService.Delete(user);
-            if (result.Success)
-            {
-                return Ok(result);
-            }
-            return BadRequest(result);
-        }
-
-        [HttpPost("update")]
-        public IActionResult Update(User user)
-        {
-            var result = _userService.Update(user);
-            if (result.Success)
+            var result = _userService.Add(user);
+            if (result != null)
             {
                 return Ok(result);
             }

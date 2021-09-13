@@ -30,6 +30,11 @@ namespace Business.Concrete
             IResult result = BusinessRules.Run(CheckIfCarImageExist(carImage.CarId)
                 ,CheckIfCarImageLimitMax(carImage.CarId));
 
+            if (result != null)
+            {
+                return result;
+            }
+
             var carImageResult = FileHelperManager.Upload(formFile);
             if (!carImageResult.Success)
             {
@@ -91,17 +96,13 @@ namespace Business.Concrete
                 var result = _carImageDal.GetAll(c => c.CarId == carId).Any();
                 if (!result)
                 {
-                    using (EntityDatabaseContext context = new EntityDatabaseContext())
-                    {
-                        var carImage = from c in context.Cars
-                                       join i in context.CarImages
-                                       on c.Id equals i.CarId
-                                       select new CarImage { CarId = c.Id, ImagePath = path, Date = DateTime.Now };
-                        //List<CarImage> carImage = new List<CarImage>();
-                        //carImage.Add(new CarImage { CarId = carId, ImagePath = path, Date = DateTime.Now });
-                        
-                    }
-                    return new SuccessResult();
+                        List<CarImage> carImage = new List<CarImage>();
+                        carImage.Add(new CarImage { CarId = carId, ImagePath = path, Date = DateTime.Now });
+                        return new SuccessDataResult<List<CarImage>>(carImage);
+                }
+                else
+                {
+                    return new ErrorDataResult<List<CarImage>>();
                 }
 
             }
@@ -111,7 +112,7 @@ namespace Business.Concrete
                 return new ErrorDataResult<List<CarImage>>(exception.Message);
             }
 
-            return new SuccessDataResult<List<CarImage>>(_carImageDal.GetAll(c => c.CarId == carId).ToList());
+            //return new SuccessDataResult<List<CarImage>>(_carImageDal.GetAll(c => c.CarId == carId).ToList());
         }
 
         private IResult CheckIfCarImageLimitMax(int carId)
