@@ -33,7 +33,7 @@ namespace Business.Concrete
 
         public IDataResult<List<Color>> GetByColorId(int Id)
         {
-            return new SuccessDataResult<List<Color>>(_colorDal.GetAll(p=> p.Id == Id));
+            return new SuccessDataResult<List<Color>>(_colorDal.GetAll(p=> p.ColorId == Id));
         }
 
         [ValidationAspect(typeof(ColorValidator))]

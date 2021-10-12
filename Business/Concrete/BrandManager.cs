@@ -32,7 +32,7 @@ namespace Business.Concrete
 
         public IDataResult<List<Brand>> GetById(int Id)
         {
-            return new SuccessDataResult<List<Brand>>(_brandDal.GetAll(p => p.Id == Id));
+            return new SuccessDataResult<List<Brand>>(_brandDal.GetAll(p => p.BrandId == Id));
         }
 
         [ValidationAspect(typeof(BrandValidator))]
